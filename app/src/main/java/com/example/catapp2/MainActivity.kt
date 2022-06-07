@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity() {
             CoroutineScope(Dispatchers.Main).launch {
                 getCurrentData()
             }
-
         }
     }
 
@@ -47,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         } catch (e: Exception) {
             e.message?.let { Log.d("MainActivity", it) }
             withContext(Dispatchers.Main) {
-                Toast.makeText(applicationContext,e.message,Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, e.message, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -60,6 +59,7 @@ class MainActivity : AppCompatActivity() {
         progressBar.visibility = View.VISIBLE
         val api = MainActivity.RetrofitHelper.getInstance().create(ApiRequests::class.java)
         val result = api.getCatFacts()
+        Log.d("MainActivity", result.toString())
         if (result != null) {
             val data = result.body()!!
             Log.d("MainActivity", data.toString())
@@ -68,43 +68,62 @@ class MainActivity : AppCompatActivity() {
                 progressBar.visibility = View.GONE
                 text.text = data.text
             }
-
         }
     }
 
     private suspend fun workOfAPICall2(): Unit {
-        val text2: TextView = findViewById(R.id.text2)
-        val progressBar2 = findViewById<ProgressBar>(R.id.progressBar2)
-        text2.visibility = View.GONE
-        progressBar2.visibility = View.VISIBLE
-        val api = MainActivity.RetrofitHelper.getInstance().create(ApiRequests::class.java)
-        val result2 = api.getCatFacts()
-        if (result2 != null) {
-            val data = result2.body()!!
-            Log.d("MainActivity", data.toString())
+        try {
+            val text2: TextView = findViewById(R.id.text2)
+            val progressBar2 = findViewById<ProgressBar>(R.id.progressBar2)
+            text2.visibility = View.GONE
+            progressBar2.visibility = View.VISIBLE
+            val api = MainActivity.RetrofitHelper.getInstance().create(ApiRequests::class.java)
+            val result2 = api.getCatFacts()
+            if (result2 != null) {
+                val data = result2.body()!!
+                Log.d("MainActivity", data.toString())
+                withContext(Dispatchers.Main) {
+                    text2.visibility = View.VISIBLE
+                    progressBar2.visibility = View.GONE
+                    text2.text = data.text
+                }
+            }
+        } catch (e: Exception) {
+            e.message?.let { Log.d("MainActivity", it) }
+            val newText = "ERORRR://"
+            text2.text = newText
             withContext(Dispatchers.Main) {
                 text2.visibility = View.VISIBLE
                 progressBar2.visibility = View.GONE
-                text2.text = data.text
             }
-
         }
+
     }
 
     private suspend fun workOfAPICall3() {
-        val text3: TextView = findViewById(R.id.text3)
-        val progressBar3 = findViewById<ProgressBar>(R.id.progressBar3)
-        text3.visibility = View.GONE
-        progressBar3.visibility = View.VISIBLE
-        val api = MainActivity.RetrofitHelper.getInstance().create(ApiRequests::class.java)
-        val result3 = api.getCatFacts()
-        if (result3 != null) {
-            val data = result3.body()!!
-            Log.d("MainActivity", data.toString())
+        try {
+            val text3: TextView = findViewById(R.id.text3)
+            val progressBar3 = findViewById<ProgressBar>(R.id.progressBar3)
+            text3.visibility = View.GONE
+            progressBar3.visibility = View.VISIBLE
+            val api = MainActivity.RetrofitHelper.getInstance().create(ApiRequests::class.java)
+            val result3 = api.getCatFacts()
+            if (result3 != null) {
+                val data = result3.body()!!
+                Log.d("MainActivity", data.toString())
+                withContext(Dispatchers.Main) {
+                    text3.visibility = View.VISIBLE
+                    progressBar3.visibility = View.GONE
+                    text3.text = data.text
+                }
+            }
+        } catch (e: Exception) {
+            e.message?.let { Log.d("MainActivity", it) }
+            val newText = "ERORRR://"
+            text3.text = newText
             withContext(Dispatchers.Main) {
                 text3.visibility = View.VISIBLE
                 progressBar3.visibility = View.GONE
-                text3.text = data.text
             }
         }
     }
