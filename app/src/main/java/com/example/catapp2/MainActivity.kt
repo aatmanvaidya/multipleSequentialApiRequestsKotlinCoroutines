@@ -52,21 +52,31 @@ class MainActivity : AppCompatActivity() {
     }
 
     private suspend fun workOfAPICall1(): Unit {
-        val text: TextView = findViewById(R.id.text)
-        val progressBar = findViewById<ProgressBar>(R.id.progressBar)
+        try {
+            val text: TextView = findViewById(R.id.text)
+            val progressBar = findViewById<ProgressBar>(R.id.progressBar)
 
-        text.visibility = View.GONE
-        progressBar.visibility = View.VISIBLE
-        val api = MainActivity.RetrofitHelper.getInstance().create(ApiRequests::class.java)
-        val result = api.getCatFacts()
-        Log.d("MainActivity", result.toString())
-        if (result != null) {
-            val data = result.body()!!
-            Log.d("MainActivity", data.toString())
+            text.visibility = View.GONE
+            progressBar.visibility = View.VISIBLE
+            val api = MainActivity.RetrofitHelper.getInstance().create(ApiRequests::class.java)
+            val result = api.getCatFacts()
+            Log.d("MainActivity", result.toString())
+            if (result != null) {
+                val data = result.body()!!
+                Log.d("MainActivity", data.toString())
+                withContext(Dispatchers.Main) {
+                    text.visibility = View.VISIBLE
+                    progressBar.visibility = View.GONE
+                    text.text = data.text
+                }
+            }
+        } catch (e: Exception) {
+            e.message?.let { Log.d("MainActivity", it) }
+            val newText = "ERORRR://"
+            text.text = newText
             withContext(Dispatchers.Main) {
                 text.visibility = View.VISIBLE
                 progressBar.visibility = View.GONE
-                text.text = data.text
             }
         }
     }
